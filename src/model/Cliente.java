@@ -19,17 +19,15 @@ public class Cliente {
 	
 	@Override
 	public boolean equals(Object obj) {		
-		if (obj == null) {
+		if (obj == null) 
 			return false;
-		}
 		
-		if (this.getClass() != obj.getClass()) {
+		if (this.getClass() != obj.getClass()) 
 			return false;
-		}
 		
-		Cliente outro = (Cliente) obj;
+		Cliente outroCliente = (Cliente) obj;
 		
-		return outro.getNome().equals(this.nome);
+		return outroCliente.getNome().equals(this.nome);
 	}
 
 }

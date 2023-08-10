@@ -4,28 +4,38 @@ import java.util.Arrays;
 
 public class Vetor {
 
-	private Cliente[] clientes = new Cliente[5];
+	private Cliente[] vetor = new Cliente[5];
 	private int totalClientes = 0; 
 	
 	public int getTamanhoVetor() { 
-		return clientes.length;
+		return vetor.length;
+	}
+	
+	public boolean verificarVetorCheio() {
+		return totalClientes == getTamanhoVetor();
+	}
+	
+	public boolean verificarVetorPoucosElementos() {
+		return totalClientes < (vetor.length * 0.25);
+	}
+	
+	public boolean verificarVetorMenorTamanhoPossivel() {
+		return vetor.length != 5;
 	}
 	
 	private void aumentarEspacoVetor() {
-		if (totalClientes == getTamanhoVetor()) {
-			Cliente[] novoVetor = Arrays.copyOf(clientes, clientes.length * 2);
-			clientes = novoVetor;
-		}
+		if (verificarVetorCheio()) 
+			vetor = Arrays.copyOf(vetor, vetor.length * 2);
 	}
 	
-	public void liberarEspacoVetor() {
-		if ((totalClientes < (clientes.length * 0.25)) && (clientes.length != 5)) {
-			Cliente[] novoVetor = Arrays.copyOf(clientes, clientes.length / 2);
-			clientes = novoVetor;
+	private void liberarEspacoVetor() {
+		if (verificarVetorPoucosElementos() && verificarVetorMenorTamanhoPossivel()) {
+			Cliente[] novoVetor = Arrays.copyOf(vetor, vetor.length / 2);
+			vetor = novoVetor;
 		}
 	}
 		
-	public int pegaTotalClientes() {
+	public int getTotalClientes() {
 		return totalClientes;
 	}
 	
@@ -37,81 +47,73 @@ public class Vetor {
 		return (posicao >= 0) && (posicao < totalClientes);
 	}
 	
-	public Cliente pegar(int posicao) {
-		if (!posicaoOcupada(posicao)) {
+	public Cliente getClientePosicaoEspecifica(int posicao) {
+		if (!posicaoOcupada(posicao)) 
 			throw new IllegalArgumentException("Posicao invalida");
-		}
-		return clientes[posicao];
+		
+		return vetor[posicao];
 	}
 	
 	public boolean contem(Cliente clienteBuscado) {
 		for (int i=0; i<totalClientes; i++) {
-			if (clienteBuscado.equals(clientes[i])) {
-				return true;
-			}
+			if (clienteBuscado.equals(vetor[i])) 
+				return true;	
 		}
 		return false;
 	}
 	
 	public void adicionar(Cliente novoCliente) {
 		aumentarEspacoVetor();
-		clientes[totalClientes] = novoCliente;
+		vetor[totalClientes] = novoCliente;
 		totalClientes++;
 	}
 	
-	public void adicionar(Cliente novoCliente, int posicaoAdicionar) {
+	public void adicionarPosicaoEspecifica(Cliente novoCliente, int posicaoAdicionar) {
 		aumentarEspacoVetor();
-		if (!posicaoValidaInsercao(posicaoAdicionar)){
+		if (!posicaoValidaInsercao(posicaoAdicionar))
 			throw new IllegalArgumentException("Posicao invalida");
-		}
 		
 		for (int i=totalClientes; i>=posicaoAdicionar; i--) {
-			clientes[i+1] = clientes[i];
+			vetor[i+1] = vetor[i];
 		}
-		clientes[posicaoAdicionar] = novoCliente;
+		vetor[posicaoAdicionar] = novoCliente;
 		totalClientes++;
 	}
 	
-	public void remover(int posicaoRemover) {
-		if (!posicaoOcupada(posicaoRemover)) {
+	public void removerPosicaoEspecifica(int posicaoRemover) {
+		if (!posicaoOcupada(posicaoRemover))
 			throw new IllegalArgumentException("Posicao invalida");
-		}
-		
-		for (int i=posicaoRemover; i < totalClientes; i++) {
-			clientes[i] = clientes[i+1];
-		}
+	
+		for (int i=posicaoRemover; i < totalClientes; i++) 
+			vetor[i] = vetor[i+1];
 		
 		totalClientes--;
 		liberarEspacoVetor();
 	}
 	
 	public void removerUltimaPosicao() {
-		if(!posicaoOcupada(totalClientes - 1)) { 
+		if(!posicaoOcupada(totalClientes - 1)) 
 			throw new IllegalArgumentException("Posicao invalida");
-		}
 		
-		clientes[totalClientes - 1] = null;
+		vetor[totalClientes - 1] = null;
 		totalClientes--;
 		liberarEspacoVetor();
 	}
 	
 	public void removerPrimeiraPosicao() {
-		if(!posicaoOcupada(0)) {
+		if(!posicaoOcupada(0)) 
 			throw new IllegalArgumentException("Posicao invalida");
-		}
 		
-		for (int i = 0; i < totalClientes; i++) {
-			clientes[i] = clientes[i+1];
-		}
+		for (int i = 0; i < totalClientes; i++) 
+			vetor[i] = vetor[i+1];
 		
 		totalClientes--;
 		liberarEspacoVetor();
 	}
 	
 	public void removerTodasPosicoes() {
-		for (int i = 0; i < totalClientes; i++) {
-			clientes[i] = null;
-		}
+		for (int i = 0; i < totalClientes; i++) 
+			vetor[i] = null;
 		
 		totalClientes = 0;
 		liberarEspacoVetor();
